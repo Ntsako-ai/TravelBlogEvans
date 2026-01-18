@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRIVEN | Modern Overland Journal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #000000;
+            --text-main: #111111;
+            --text-light: #666666;
+            --bg-light: #F4F4F4;
+            --white: #ffffff;
+            --radius: 24px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        /* --- Global Resets & Animations --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        /* --- Navigation (Glassmorphism + Sticky) --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 6%;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 1rem 6%;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 40px; }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .search-bar {
+            background: #f0f0f0;
+            border-radius: 50px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            border: 1px solid transparent;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            outline: none;
+            padding-left: 10px;
+            font-size: 0.9rem;
+            width: 150px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover { opacity: 0.6; }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            background: url('IMG20250929101830~4.jpg') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.1); /* Subtle darkening */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: var(--white);
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        /* --- Filter Bar (Reference Image Style) --- */
+        .filter-bar {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            padding: 20px 40px;
+            border-radius: 100px;
+            display: flex;
+            gap: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            z-index: 10;
+            width: 85%;
+            max-width: 1000px;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            border-right: 1px solid #eee;
+            padding-right: 30px;
+        }
+
+        .filter-item:last-child { border: none; }
+
+        .filter-item label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .filter-item select, .filter-item span {
+            font-weight: 600;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 0.95rem;
+        }
+
+        .btn-black {
+            background: var(--primary);
+            color: var(--white);
+            padding: 15px 35px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-black:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* --- Section Styling --- */
+        section {
+            padding: 10rem 8% 5rem 8%;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            letter-spacing: -1px;
+        }
+
+        /* --- Destination Cards --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .card {
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* --- Modern Journal Section --- */
+        .journal-container {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .journal-feature {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .journal-feature img {
+            width: 50%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+
+        .journal-content {
+            width: 45%;
+        }
+
+        .tag {
+            background: var(--bg-light);
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        /* --- The Rig Section (Specs) --- */
+        .rig-section {
+            background: var(--bg-light);
+            border-radius: 50px;
+            margin: 0 4% 5rem 4%;
+            text-align: center;
+            padding: 6rem 5%;
+        }
+
+        .rig-specs {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 4rem;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .spec-item h4 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .spec-item p {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-light);
+            letter-spacing: 1px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 5rem 8%;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copyright { color: var(--text-light); font-size: 0.9rem; }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-content h1 { font-size: 3rem; }
+            .filter-bar { 
+                flex-direction: column; 
+                border-radius: 30px; 
+                width: 90%; 
+                bottom: -150px;
+                padding: 30px;
+            }
+            .filter-item { border-right: none; border-bottom: 1px solid #eee; padding: 10px 0; }
+            .journal-feature { flex-direction: column !important; }
+            .journal-feature img, .journal-content { width: 100%; }
+            .rig-specs { flex-direction: column; gap: 30px; }
+            .nav-left .search-bar { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="nav-left">
+            <a href="#" class="logo">DRIVEN.</a>
+        </div>
+        <ul>
+            <li><a href="#road">The Road</a></li>
+            <li><a href="#galleries">Galleries</a></li>
+            <li><a href="#rig">The Rig</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content fade-in">
+            <h1>Adventure is a <br>Long Drive Away.</h1>
+            <a href="#road" class="btn-black">Explore The Journey</a>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-item">
+                <label>Activity</label>
+                <select>
+                    <option>Overlanding</option>
+                    <option>Photography</option>
+                    <option>Camping</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label>Location</label>
+                <select>
+                    <option>Highlands</option>
+                    <option>Desert</option>
+                    <option>Alps</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label>Date</label>
+                <span>Jan 2026</span>
+            </div>
+            <div class="filter-item" style="border:none">
+                <label>Budget</label>
+                <span>Any Range</span>
+            </div>
+            <a href="#" class="btn-black" style="padding: 0 40px;">Find Trip</a>
+        </div>
+    </header>
+
+    <section id="road">
+        <h2>Featured Expeditions</h2>
+        <div class="grid">
+            <div class="card fade-in">
+                <img src="IMG20250312180532.jpg" alt="Highlands">
+                <h3>A Fresh Welcome</h3>
+                <p>A vibrant rainbow arches over a modern entrance plaza, captured just after a rainfall. The wet pavement reflects the soft evening light.</p>
+            </div>
+            <div class="card fade-in">
+                <img src="IMG20250301151818.jpg" alt="Alps">
+                <h3>The Road Less Traveled</h3>
+                <p>A wide, paved road stretches toward a backdrop of rolling hills and dramatic, towering clouds.</p>
+            </div>
+            <div class="card fade-in">
+                <img src="11.jpg" alt="Desert">
+                <h3>Bridging the Gap</h3>
+                <p>Taken from the rig, this shot showcases the striking architecture of a suspension bridge spanning a wide expanse of water.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="galleries" style="background-color: var(--white);">
+        <div class="journal-container">
+            <div class="journal-feature fade-in">
+                <img src="IMG20250329073539.jpg" alt="Overland Gear">
+                <div class="journal-content">
+                    <span class="tag">Latest Story</span>
+                    <h3>Why the Long Road is Always Better.</h3>
+                    <p>There is a specific kind of magic that happens after the fifth hour of driving. The city noise fades, the radio hits a static patch, and it's just you and the machine...</p>
+                    <br>
+                    <a href="#" class="btn-black">Read Entry</a>
+                </div>
+            </div>
+
+            <div class="journal-feature fade-in" style="flex-direction: row-reverse;">
+                <img src="IMG20250929170936-EFFECTS.jpg" alt="The Rig">
+                <div class="journal-content">
+                    <span class="tag">The Heavyweight King</span>
+                    <h3>The Master of Terrains</h3>
+                    <p>The 100 Series is often considered one of the most reliable and capable vehicles ever made by Toyota. It was a significant step up in luxury while remaining a serious workhorse.</p>
+                    <br>
+                    <a href="#" class="btn-black">View Gallery</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="rig" class="rig-section">
+        <div class="fade-in">
+            <h2>The Trusted Rig</h2>
+            <p style="color: var(--text-light);">Built to go anywhere. Prepared for anything.</p>
+            <div class="rig-specs">
+                <div class="spec-item">
+                    <h4>70 Series</h4>
+                    <p>Model Platform</p>
+                </div>
+                <div class="spec-item">
+                    <h4>4.5L V8</h4>
+                    <p>Turbo Diesel</p>
+                </div>
+                <div class="spec-item">
+                    <h4>35-Inch</h4>
+                    <p>All-Terrain Tires</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="logo">DRIVEN.</div>
+        <div class="copyright">
+            © 2026 DRIVEN TRAVEL JOURNAL. COORDINATES: 23.4475° S, 18.4597° E
+        </div>
+        <div class="footer-links">
+            <a href="#" class="btn-black" style="padding: 10px 20px; font-size: 0.7rem;">Follow Us</a>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Effect for Navigation
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for Fade-in effects
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = "0";
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
